@@ -22,8 +22,7 @@
 
 #include <algorithm>
 #include <vector>
-
-#include <xen/be/XenStore.hpp>
+#include <xen/be/Exception.hpp>
 
 #ifdef WITH_IVI_EXTENSION
 #include "wayland/Connector.hpp"
@@ -155,7 +154,14 @@ DisplayBackend::DisplayBackend(DisplayPtr display,
 	BackendBase("DisplBackend", deviceName),
 	mDisplay(display)
 {
-	mDisplay->start();
+	if(mDisplay)
+	{
+		mDisplay->start();
+	}
+	else
+	{
+		throw std::invalid_argument("DisplayBackend can not be constructed, because mDisplay is not initialized");
+	}
 }
 
 void DisplayBackend::onNewFrontend(domid_t domId, uint16_t devId)
