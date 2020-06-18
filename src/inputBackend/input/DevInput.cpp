@@ -26,6 +26,9 @@ using InputItf::KeyboardCallbacks;
 using InputItf::PointerCallbacks;
 using InputItf::TouchCallbacks;
 
+template<typename T>
+T& as_lvalue( T&& t ) { return t; }
+
 /*******************************************************************************
  * InputBase
  ******************************************************************************/
@@ -87,12 +90,12 @@ void DevInputBase::init()
 		throw XenBackend::Exception("Can't open device: " + mName, errno);
 	}
 
-	if (ioctl(mFd, EVIOCGRAB, reinterpret_cast<void*>(1)))
+	if (ioctl(mFd, EVIOCGRAB, &as_lvalue(int{1})))
 	{
 		throw XenBackend::Exception("Grabbed by another process", EBUSY);
 	}
 
-	ioctl(mFd, EVIOCGRAB, reinterpret_cast<void*>(0));
+	ioctl(mFd, EVIOCGRAB, &as_lvalue(int{0}));
 
 	mPollFd.reset(new PollFd(mFd, POLLIN));
 
