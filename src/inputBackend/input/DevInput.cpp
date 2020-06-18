@@ -52,7 +52,14 @@ DevInputBase::DevInputBase(const string& name) :
 
 DevInputBase::~DevInputBase()
 {
-	stop();
+	try
+	{
+	    stop();
+	}
+	catch(const std::exception& err )
+	{
+		LOG(mLog, ERROR) << err.what();
+	}
 	release();
 }
 
