@@ -21,7 +21,7 @@
 #include "DisplayCommandHandler.hpp"
 
 #include <iomanip>
-
+#include <cassert>
 #include <xen/be/Exception.hpp>
 
 using std::dec;
@@ -89,15 +89,20 @@ DisplayCommandHandler::DisplayCommandHandler(
 	mEventId(0),
 	mLog("CommandHandler")
 {
+	assert(mConnector);
+	assert(mDisplay);
+	assert(mBuffersStorage);
+	assert(mEventBuffer);
+	
 	LOG(mLog, DEBUG) << "Create command handler, connector name: "
-					 << mConnector->getName();
+                         << mConnector->getName();
 }
 
 DisplayCommandHandler::~DisplayCommandHandler()
 {
+	
 	LOG(mLog, DEBUG) << "Delete command handler, connector name: "
 					 << mConnector->getName();
-
 	mConnector.reset();
 }
 
